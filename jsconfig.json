@@ -1,0 +1,12 @@
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./*"],
+      "~/*": ["./src/*"]
+    }
+  },
+  "types": ["vitest/globals"],
+  "include": ["**/*.vue", "**/*.js"],
+  "exclude": ["node_modules"]
+}
