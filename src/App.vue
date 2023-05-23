@@ -1,5 +1,10 @@
 <script setup>
-  import { LMap, LTileLayer, LControl } from '@vue-leaflet/vue-leaflet'
+  import {
+    LMap,
+    LTileLayer,
+    LControl,
+    LGeoJson,
+  } from '@vue-leaflet/vue-leaflet'
   import { ref } from 'vue'
   import { debounce, lowerCase } from 'lodash-es'
 
@@ -12,11 +17,6 @@
   const neighborhoods = ref(null)
   const cities = ref([])
   const wait = ref(500)
-
-  const tileUrl = ref('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png')
-
-  const minZoom = ref(4)
-  const maxZoom = ref(16)
 
   const zoom = ref(4)
   const center = ref([-14.235, -51.9253])
@@ -38,7 +38,7 @@
   }, wait.value)
 
   const setNeighborhoods = debounce(async (city) => {
-    map.value.leafletObject.setView(city.coordinates, 12)
+    map.value.leafletObject.setView(city.coordinates, 14)
 
     const { data: response } = await getNeighborhoods(city.id)
 
@@ -51,15 +51,17 @@
     <VMain>
       <LMap
         ref="map"
-        v-model:center="center"
-        v-model:zoom="zoom"
+        v-model:center.sync="center"
+        v-model:zoom.sync="zoom"
         :options="{
-          minZoom: minZoom,
-          maxZoom: maxZoom,
+          minZoom: 4,
+          maxZoom: 16,
           zoomControl: false,
           attributionControl: false,
         }"
         :use-global-leaflet="false">
+        <LGeoJson :geojson="neighborhoods" />
+        <LTileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
         <LControl
           position="topleft"
           class="ma-4"
@@ -89,7 +91,6 @@
             <VBtn icon="add" @click="zoomIn" />
           </VBtnGroup>
         </LControl>
-        <LTileLayer :url="tileUrl" />
       </LMap>
     </VMain>
   </VApp>
