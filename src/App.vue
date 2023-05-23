@@ -218,12 +218,7 @@
           </VCard>
         </LControl>
         <LControl position="bottomright" class="ma-4">
-          <VBtnGroup
-            v-if="
-              neighborhoodName &&
-              populations?.length &&
-              $vuetify.display.smAndUp
-            ">
+          <VBtnGroup>
             <VBtn icon="remove" @click="zoomOut" />
             <VBtn icon="add" @click="zoomIn" />
           </VBtnGroup>
