@@ -11,6 +11,7 @@
   import { searchCities, getNeighborhoods } from '~/api'
 
   const map = ref(null)
+  const geojson = ref(null)
 
   const city = ref(null)
   const search = ref(null)
@@ -60,7 +61,39 @@
           attributionControl: false,
         }"
         :use-global-leaflet="false">
-        <LGeoJson :geojson="neighborhoods" />
+        <LGeoJson
+          ref="geojson"
+          :geojson="neighborhoods"
+          :options="{
+            onEachFeature: (feature, layer) => {
+              layer.on({
+                mouseover: (event) => {
+                  event.target.setStyle({
+                    weight: 5,
+                    dashArray: '',
+                  })
+                },
+                mouseout: (event) => {
+                  geojson.leafletObject.resetStyle(event.target)
+                },
+                click: (event) => {
+                  map.leafletObject.fitBounds(event.target.getBounds())
+                },
+              })
+            },
+          }"
+          :options-style="
+            () => {
+              return {
+                fillColor: '#009688',
+                weight: 2,
+                opacity: 1,
+                color: 'white',
+                dashArray: '4',
+                fillOpacity: 0.7,
+              }
+            }
+          " />
         <LTileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
         <LControl
           position="topleft"
