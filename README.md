@@ -12,6 +12,47 @@ Para navegar dentro deste repositório e rodar o projeto, é necessário que voc
 
 [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin)
 
+## Como rodar o projeto?
+
+### Instalação geral
+
+Ative a versão correta do `node`
+
+```sh
+nvm install
+nvm use
+```
+
+Instale as dependências
+
+```sh
+npm install
+```
+
+### Rodar o front-end
+
+Rodar o projeto é extremamente simples, use o comando:
+
+```sh
+npm run dev
+```
+
+> Ao acessar http://localhost:3000, seu front-end estará funcionando
+
+### Rodar os testes do front-end
+
+Para rodar os testes unitários, use o comando:
+
+```sh
+npm run test:unit
+```
+
+Para rodar os testes end-to-end, use o comando:
+
+```sh
+npm run test:e2e
+```
+
 ## O que foi usado nesse projeto?
 
 - [Vue](https://vuejs.org/): Framework JavaScript para construir interfaces e aplicações;
@@ -24,22 +65,22 @@ Para navegar dentro deste repositório e rodar o projeto, é necessário que voc
 
 Dentro da nossa Mock temos três modelos, sendo eles:
 
-  - City, modelo cidades, que contém:
-    - Id: chave primária do modelo;
-    - Name: nome da cidade;
-    - Coordinates: ponto que traz a latitude e longitude da cidade.
+  - `City`, modelo cidades, que contém:
+    - `Id`: chave primária do modelo;
+    - `Name`: nome da cidade;
+    - `Coordinates`: ponto que traz a latitude e longitude da cidade.
 
-  - Neighborhood, modelo bairros, que contém:
-    - Id: chave primária do modelo;
-    - Name: nome do bairro;
-    - CityId: chave estrangeira do modelo City;
-    - Coordinates: ponto que traz a latitude e longitude do bairro.
+  - `Neighborhood`, modelo bairros, que contém:
+    - `Id`: chave primária do modelo;
+    - `Name`: nome do bairro;
+    - `CityId`: chave estrangeira do modelo City;
+    - `Coordinates`: ponto que traz a latitude e longitude do bairro.
 
-  - Population, modelo população, que contém:
-    - Id: chave primária do modelo;
-    - Year: ano da população;
-    - Count: tamanho da população dado o ano;
-    - NeighborhoodId: chave estrangeira do modelo Neighborhood.
+  - `Population`, modelo população, que contém:
+    - `Id`: chave primária do modelo;
+    - `Year`: ano da população;
+    - `Count`: tamanho da população dado o ano;
+    - `NeighborhoodId`: chave estrangeira do modelo Neighborhood.
 
 Guardamos dentro do "banco de dados" da nossa Mock de forma relacional, ou seja, cada bairro tem uma cidade e cada população tem um bairro.
 
@@ -62,8 +103,8 @@ API que busca cidades com base em uma query string.
 Parâmetros:
   - `query` - Nome da cidade
     - **Obrigatório**
-    - Tipo de dado: String
-    - Tipo de parâmetro: Query
+    - Tipo de dado: `String`
+    - Tipo de parâmetro: `Query`
 
 Respostas:
   - `200 OK`: Objeto com as cidades encontradas.
@@ -103,8 +144,8 @@ Lista a geometrias dos bairros de uma cidade.
 Parâmetros:
   - `cityId` - ID da cidade
     - **Obrigatório**
-    - Tipo de dado: Integer
-    - Tipo de parâmetro: Path
+    - Tipo de dado: `Integer`
+    - Tipo de parâmetro: `Path`
 
 Respostas:
   - `200 OK`: Objeto com as geometrias dos bairros da dada cidade.
@@ -163,8 +204,8 @@ Lista a população de um bairro ao passar dos anos.
 Parâmetros:
   - `neighborhoodId` - Nome da cidade
     - **Obrigatório**
-    - Tipo de dado: Integer
-    - Tipo de parâmetro: Path
+    - Tipo de dado: `Integer`
+    - Tipo de parâmetro: `Path`
 
 Respostas:
   - `200 OK`: Lista com as populações.
@@ -205,43 +246,3 @@ Respostas:
   {}
   ```
 
-## Como rodar o projeto?
-
-### Instalação geral
-
-Ative a versão correta do `node`
-
-```sh
-nvm install
-nvm use
-```
-
-Instale as dependências
-
-```sh
-npm install
-```
-
-### Rodar o front-end
-
-Rodar o projeto é extremamente simples, use o comando:
-
-```sh
-npm run dev
-```
-
-> Ao acessar http://localhost:3000, seu front-end estará funcionando
-
-### Rodar os testes do front-end
-
-Para rodar os testes unitários, use o comando:
-
-```sh
-npm run test:unit
-```
-
-Para rodar os testes end-to-end, use o comando:
-
-```sh
-npm run test:e2e
-```
