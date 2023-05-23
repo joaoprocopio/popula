@@ -5,10 +5,31 @@
     LControl,
     LGeoJson,
   } from '@vue-leaflet/vue-leaflet'
+  import { Bar } from 'vue-chartjs'
   import { ref } from 'vue'
   import { debounce, lowerCase } from 'lodash-es'
 
   import { searchCities, getNeighborhoods, getPopulations } from '~/api'
+
+  import {
+    Chart as ChartJS,
+    Title,
+    Tooltip,
+    Legend,
+    BarElement,
+    CategoryScale,
+    LinearScale,
+  } from 'chart.js'
+  import { onMounted } from 'vue'
+
+  ChartJS.register(
+    Title,
+    Tooltip,
+    Legend,
+    BarElement,
+    CategoryScale,
+    LinearScale
+  )
 
   const map = ref(null)
   const geojson = ref(null)
@@ -52,7 +73,13 @@
   const setPopulations = debounce(async (neighborhoodId) => {
     const { data: response } = await getPopulations(neighborhoodId)
 
-    populations.value = response.populations
+    populations.value = response.populations.map((population) => {
+      return {
+        id: population.id,
+        year: population.year,
+        count: population.count,
+      }
+    })
   }, wait.value)
 </script>
 
@@ -137,7 +164,19 @@
             <VCardTitle>
               {{ neighborhoodName }}
             </VCardTitle>
-            <!-- exibe o grafico das populacoes -->
+            <VCardText>
+              <Bar
+                :data="{
+                  labels: populations.map((population) => population.year),
+                  datasets: [
+                    {
+                      label: 'Population',
+                      backgroundColor: '#7B1FA2',
+                      data: populations.map((population) => population.count),
+                    },
+                  ],
+                }" />
+            </VCardText>
           </VCard>
         </LControl>
         <LControl position="bottomright" class="ma-4">
