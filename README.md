@@ -8,33 +8,38 @@ Para navegar dentro deste repositório e rodar o projeto, é necessário que voc
 
 ## Extensões do VSCode
 
-
 [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar)
 
 [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin)
 
-## O que foi usado e por que foi usado nesse projeto?
+## O que foi usado nesse projeto?
+
+- [Vue](https://vuejs.org/): Framework JavaScript para construir interfaces e aplicações;
+- [Vuetify](https://vuetifyjs.com/en/): Biblioteca de componentes Vue baseada em Material Design;
+- [Mirage](https://miragejs.com/): Client-side server para construir API Mock;
+- [Leaflet](https://leafletjs.com/): Biblioteca para construir mapas interativos;
+- [Chart](https://www.chartjs.org/): Biblioteca extremamente simples e intuitiva para criar gráficos.  
 
 ## Modelagem
 
-Dentro da nossa Mock temos três tabelas, sendo elas:
+Dentro da nossa Mock temos três modelos, sendo eles:
 
-  - City, tabela de cidades, que contém:
-    - Id: chave primária da tabela;
+  - City, modelo cidades, que contém:
+    - Id: chave primária do modelo;
     - Name: nome da cidade;
     - Coordinates: ponto que traz a latitude e longitude da cidade.
 
-  - Neighborhood, tabela de bairros, que contém:
-    - Id: chave primária da tabela;
+  - Neighborhood, modelo bairros, que contém:
+    - Id: chave primária do modelo;
     - Name: nome do bairro;
-    - CityId: chave estrangeira da tabela City;
+    - CityId: chave estrangeira do modelo City;
     - Coordinates: ponto que traz a latitude e longitude do bairro.
 
-  - Population, tabela de população, que contém:
-    - Id: chave primária da tabela;
+  - Population, modelo população, que contém:
+    - Id: chave primária do modelo;
     - Year: ano da população;
     - Count: tamanho da população dado o ano;
-    - NeighborhoodId: chave estrangeira da tabela Neighborhood.
+    - NeighborhoodId: chave estrangeira do modelo Neighborhood.
 
 Guardamos dentro do "banco de dados" da nossa Mock de forma relacional, ou seja, cada bairro tem uma cidade e cada população tem um bairro.
 
