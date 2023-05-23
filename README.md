@@ -96,7 +96,7 @@ API que conversa em GEOJson
 Lista a geometrias dos bairros de uma cidade.
 
 Parâmetros:
-  - `cityId` - Nome da cidade
+  - `cityId` - ID da cidade
     - **Obrigatório**
     - Tipo de dado: Integer
     - Tipo de parâmetro: Path
@@ -146,7 +146,59 @@ Respostas:
   ```json
   {}
   ```
- 
+
+### Population
+
+Lista a população de uma localidade ao passar dos anos.
+
+#### `GET /api/v1/populations/neighborhoods/{neighborhoodId}`
+
+Lista a população de um bairro ao passar dos anos.
+
+Parâmetros:
+  - `neighborhoodId` - Nome da cidade
+    - **Obrigatório**
+    - Tipo de dado: Integer
+    - Tipo de parâmetro: Path
+
+Respostas:
+  - `200 OK`: Lista com as populações.
+  ```json
+  {
+    "populations": [
+      {
+        "id": "1",
+        "year": 2000,
+        "count": 11567
+      },
+      {
+        "id": "2",
+        "year": 2002,
+        "count": 12345
+      },
+      {
+        "id": "3",
+        "year": 2004,
+        "count": 13450
+      },
+      {
+        "id": "4",
+        "year": 2006,
+        "count": 13550
+      }
+    ]
+  }
+  ```
+
+  - `400 Bad Request`: Ausência ou invalidez de parâmetros obrigatórios.
+  ```json
+  {}
+  ```
+
+  - `404 Not Found`: População para este bairro não foi encontrada.
+  ```json
+  {}
+  ```
 
 ## Como rodar o projeto?
 
