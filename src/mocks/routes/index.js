@@ -2,12 +2,6 @@ import { Response } from 'miragejs'
 import { lowerCase } from 'lodash-es'
 import { featureCollection, multiPolygon } from '@turf/helpers'
 
-// api/v1/search/cities?query=sao+jose+dos+campos
-
-// api/v1/geo/cities/<int:state_id>
-// api/v1/geo/districts/<int:city_id>
-
-// api/v1/population/districts/<int:city_id>
 export function routes() {
   this.namespace = 'api/v1/'
 
@@ -25,7 +19,7 @@ export function routes() {
     )
 
     if (!cities.length) {
-      return new Response(404, {}, {})
+      return new Response(404, {}, { cities })
     }
 
     return new Response(200, {}, { cities })
