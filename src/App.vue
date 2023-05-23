@@ -2,12 +2,14 @@
   import { LMap, LTileLayer, LControl } from '@vue-leaflet/vue-leaflet'
   import { ref } from 'vue'
   import { debounce, lowerCase } from 'lodash-es'
-  import axios from 'axios'
+
+  import { searchCities, getNeighborhoods } from '~/api'
 
   const map = ref(null)
 
   const city = ref(null)
   const search = ref(null)
+  const neighborhoods = ref(null)
   const cities = ref([])
   const wait = ref(500)
 
@@ -16,36 +18,31 @@
   const minZoom = ref(4)
   const maxZoom = ref(16)
 
-  const zoom = ref(13)
-  const center = ref([-23.2198, -45.8916])
+  const zoom = ref(4)
+  const center = ref([-14.235, -51.9253])
 
   const zoomOut = () => {
-    zoom.value--
+    map.value.leafletObject.zoomOut()
   }
   const zoomIn = () => {
-    zoom.value++
+    map.value.leafletObject.zoomIn()
   }
 
-  const searchCities = debounce(async () => {
+  const setCities = debounce(async () => {
     if (!search.value) return
     if (city.value?.name === search.value) return
 
-    const { data } = await axios
-      .get('api/v1/search/cities', {
-        params: {
-          query: search.value,
-        },
-      })
-      .then((response) => response)
-      .catch((error) => error)
+    const { data: response } = await searchCities(search.value)
 
-    cities.value = data
+    cities.value = response
   }, wait.value)
 
-  const getNeighborhoods = debounce((city) => {
-    center.value = city.coordinates
+  const setNeighborhoods = debounce(async (city) => {
+    map.value.leafletObject.setView(city.coordinates, 12)
 
-    console.log(map.value)
+    const { data: response } = await getNeighborhoods(city.id)
+
+    neighborhoods.value = response
   }, wait.value)
 </script>
 
@@ -68,7 +65,7 @@
           :class="{
             'ma-4': true,
             'w-screen': true,
-            'w-medium': $vuetify.display.smAndUp,
+            'w-medium': $vuetify.display.mdAndUp,
           }">
           <VAutocomplete
             v-model="city"
@@ -84,8 +81,8 @@
             hide-no-data
             variant="solo"
             prepend-inner-icon="search"
-            @update:model-value="getNeighborhoods"
-            @update:search="searchCities" />
+            @update:model-value="setNeighborhoods"
+            @update:search="setCities" />
         </LControl>
         <LControl position="bottomright" class="ma-4">
           <VBtnGroup :divided="true">

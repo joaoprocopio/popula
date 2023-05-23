@@ -1,5 +1,6 @@
 import { Response } from 'miragejs'
 import { lowerCase } from 'lodash-es'
+import { featureCollection, multiPolygon } from '@turf/helpers'
 
 // api/v1/search/cities?query=sao+jose+dos+campos
 
@@ -14,7 +15,7 @@ export function routes() {
     const query = request.queryParams?.query
 
     if (!query) {
-      return new Response(400, {}, {})
+      return new Response(400, {}, [])
     }
 
     const cities = this.serialize(
@@ -24,29 +25,39 @@ export function routes() {
     )
 
     if (!cities.length) {
-      return new Response(404, {}, {})
+      return new Response(404, {}, [])
     }
 
     return new Response(200, {}, cities)
   })
 
-  // this.get('geo/cities', function (schema) {
-  //   const neighborhoods = this.serialize(schema.neighborhoods.all())
+  this.get('geo/neighborhoods/:cityId', function (schema, request) {
+    const cityId = request.params?.cityId
 
-  //   let geometries = []
+    if (!cityId) {
+      return new Response(400, {}, {})
+    }
 
-  //   neighborhoods.forEach((neighborhood) =>
-  //     geometries.push(
-  //       multiPolygon(
-  //         neighborhood.coordinates,
-  //         { name: neighborhood.name },
-  //         { bbox: neighborhood.bbox, id: neighborhood.id }
-  //       )
-  //     )
-  //   )
+    const neighborhoods = this.serialize(schema.neighborhoods.where({ cityId }))
 
-  //   geometries = featureCollection(geometries)
+    if (!neighborhoods.length) {
+      return new Response(404, {}, {})
+    }
 
-  //   return new Response(200, {}, geometries)
-  // })
+    let geometries = []
+
+    neighborhoods.forEach((neighborhood) =>
+      geometries.push(
+        multiPolygon(
+          neighborhood.coordinates,
+          { name: neighborhood.name },
+          { bbox: neighborhood.bbox, id: neighborhood.id }
+        )
+      )
+    )
+
+    geometries = featureCollection(geometries)
+
+    return new Response(200, {}, geometries)
+  })
 }
