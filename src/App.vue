@@ -72,6 +72,8 @@
                     weight: 5,
                     dashArray: '',
                   })
+
+                  event.target.bringToFront()
                 },
                 mouseout: (event) => {
                   geojson.leafletObject.resetStyle(event.target)
