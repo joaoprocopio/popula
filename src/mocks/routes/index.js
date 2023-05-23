@@ -19,7 +19,7 @@ export function routes() {
     )
 
     if (!cities.length) {
-      return new Response(404, {}, { cities })
+      return new Response(404, {}, {})
     }
 
     return new Response(200, {}, { cities })

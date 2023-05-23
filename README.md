@@ -46,14 +46,19 @@ E ao enviar os dados para o front-end, podemos escolher o tipo da serialização
 
 Você vai encontrar os endpoints da mock em `src/mocks/routes/index.js`.
 
-### Search - API de Busca
+### Search
+
+API de Busca
 
 #### `GET /api/v1/search/cities`
 
-Busca cidades com base em uma query string.
+API que busca cidades com base em uma query string.
 
 Parâmetros:
-  - `query` - Nome da cidade **(obrigatório)**
+  - `query` - Nome da cidade
+    - **Obrigatório**
+    - Tipo de dado: String
+    - Tipo de parâmetro: Query
 
 Respostas:
   - `200 OK`: Objeto com as cidades encontradas.
@@ -72,17 +77,76 @@ Respostas:
   }
   ```
 
-  - `400 Bad Request`: Ausência de parâmetros obrigatórios.
+  - `400 Bad Request`: Ausência ou invalidez de parâmetros obrigatórios.
   ```json
   {}
   ```
 
   - `404 Not Found`: Nenhuma cidade encontrada.
   ```json
+  {}
+  ```
+
+### Geo
+
+API que conversa em GEOJson
+
+#### `GET /api/v1/geo/neighborhoods/{cityId}`
+
+Lista a geometrias dos bairros de uma cidade.
+
+Parâmetros:
+  - `cityId` - Nome da cidade
+    - **Obrigatório**
+    - Tipo de dado: Integer
+    - Tipo de parâmetro: Path
+
+Respostas:
+  - `200 OK`: Objeto com as geometrias dos bairros da dada cidade.
+  ```json
   {
-    "cities": []
+    "type": "FeatureCollection",
+    "features": [
+      {
+        "type": "Feature",
+        "id": "1",
+        "bbox": [
+          -45.916855,
+          ...
+        ],
+        "properties": {
+          "name": "Jd. Colinas"
+        },
+        "geometry": {
+          "type": "MultiPolygon",
+          "coordinates": [
+            [
+              [
+                [
+                  -45.90843208446761,
+                  -23.20827026939924
+                ],
+                ...
+              ]
+            ]
+          ]
+        }
+      },
+      ...
+    ]
   }
   ```
+
+  - `400 Bad Request`: Ausência ou invalidez de parâmetros obrigatórios.
+  ```json
+  {}
+  ```
+
+  - `404 Not Found`: Geometria dos bairros não foram encontradas.
+  ```json
+  {}
+  ```
+ 
 
 ## Como rodar o projeto?
 
