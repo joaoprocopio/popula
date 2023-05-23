@@ -62,10 +62,9 @@
         :use-global-leaflet="false">
         <LControl
           position="topleft"
-          :class="{
-            'ma-4': true,
-            'w-screen': true,
-            'w-medium': $vuetify.display.mdAndUp,
+          class="ma-4"
+          :style="{
+            width: $vuetify.display.mdAndUp ? '600px' : 'calc(100vw - 32px)',
           }">
           <VAutocomplete
             v-model="city"
@@ -95,13 +94,3 @@
     </VMain>
   </VApp>
 </template>
-
-<style>
-  .w-screen {
-    width: calc(100vw - 32px);
-  }
-
-  .w-medium {
-    width: 500px;
-  }
-</style>
