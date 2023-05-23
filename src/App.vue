@@ -69,11 +69,11 @@
   }, wait.value)
 
   const setNeighborhoods = debounce(async (city) => {
-    map.value.leafletObject.setView(city.coordinates, 14)
-
     const { data: response } = await getNeighborhoods(city.id)
 
     neighborhoods.value = response
+
+    map.value.leafletObject.flyTo(city.coordinates, 14)
   }, wait.value)
 
   const setPopulations = debounce(async (neighborhoodId) => {
@@ -146,7 +146,7 @@
           position="topleft"
           class="ma-4"
           :style="{
-            width: $vuetify.display.mdAndUp ? '600px' : 'calc(100vw - 32px)',
+            width: $vuetify.display.smAndUp ? '500px' : 'calc(100vw - 32px)',
           }">
           <VAutocomplete
             v-model="city"
@@ -165,7 +165,12 @@
             @update:model-value="setNeighborhoods"
             @update:search="setCities" />
         </LControl>
-        <LControl position="bottomleft" class="ma-4">
+        <LControl
+          position="bottomleft"
+          class="ma-4"
+          :style="{
+            width: $vuetify.display.smAndUp ? '500px' : 'calc(100vw - 32px)',
+          }">
           <VCard v-if="neighborhoodName && populations?.length">
             <VCardTitle>
               {{ neighborhoodName }}
@@ -173,6 +178,7 @@
             <VCardText>
               <Bar
                 v-if="isBarChart"
+                class="d-inline"
                 :data="{
                   labels: populations.map((population) => population.year),
                   datasets: [
@@ -182,9 +188,13 @@
                       data: populations.map((population) => population.count),
                     },
                   ],
+                }"
+                :options="{
+                  font: 'Roboto',
                 }" />
               <Line
                 v-else
+                class="d-inline"
                 :data="{
                   labels: populations.map((population) => population.year),
                   datasets: [
@@ -194,6 +204,9 @@
                       data: populations.map((population) => population.count),
                     },
                   ],
+                }"
+                :options="{
+                  font: 'Roboto',
                 }" />
             </VCardText>
             <VCardActions>
@@ -205,7 +218,12 @@
           </VCard>
         </LControl>
         <LControl position="bottomright" class="ma-4">
-          <VBtnGroup>
+          <VBtnGroup
+            v-if="
+              neighborhoodName &&
+              populations?.length &&
+              $vuetify.display.smAndUp
+            ">
             <VBtn icon="remove" @click="zoomOut" />
             <VBtn icon="add" @click="zoomIn" />
           </VBtnGroup>
