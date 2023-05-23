@@ -69,8 +69,9 @@
               layer.on({
                 mouseover: (event) => {
                   event.target.setStyle({
-                    weight: 5,
+                    weight: 4,
                     dashArray: '',
+                    fillColor: '#6A1B9A',
                   })
 
                   event.target.bringToFront()
@@ -87,9 +88,8 @@
           :options-style="
             () => {
               return {
-                fillColor: '#009688',
-                weight: 2,
-                opacity: 1,
+                fillColor: '#7B1FA2',
+                weight: 3,
                 color: 'white',
                 dashArray: '4',
                 fillOpacity: 0.7,
@@ -119,6 +119,9 @@
             prepend-inner-icon="search"
             @update:model-value="setNeighborhoods"
             @update:search="setCities" />
+        </LControl>
+        <LControl position="bottomleft" class="ma-4">
+          <VCard> a </VCard>
         </LControl>
         <LControl position="bottomright" class="ma-4">
           <VBtnGroup :divided="true">
