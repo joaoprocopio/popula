@@ -11,3 +11,9 @@ export const getNeighborhoods = async (cityId) =>
     .get(`geo/neighborhoods/${cityId}`)
     .then((response) => response)
     .catch((error) => reject(error))
+
+export const getPopulations = async (neighborhoodId) =>
+  $axios
+    .get(`populations/neighborhoods/${neighborhoodId}`)
+    .then((response) => response)
+    .catch((error) => reject(error))

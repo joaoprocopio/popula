@@ -8,23 +8,26 @@
   import { ref } from 'vue'
   import { debounce, lowerCase } from 'lodash-es'
 
-  import { searchCities, getNeighborhoods } from '~/api'
+  import { searchCities, getNeighborhoods, getPopulations } from '~/api'
 
   const map = ref(null)
   const geojson = ref(null)
-
-  const city = ref(null)
-  const search = ref(null)
-  const neighborhoods = ref(null)
-  const cities = ref([])
-  const wait = ref(500)
-
   const zoom = ref(4)
   const center = ref([-14.235, -51.9253])
+
+  const neighborhoodName = ref(null)
+
+  const city = ref(null)
+  const neighborhoods = ref(null)
+  const populations = ref(null)
+  const cities = ref([])
+  const search = ref(null)
+  const wait = ref(500)
 
   const zoomOut = () => {
     map.value.leafletObject.zoomOut()
   }
+
   const zoomIn = () => {
     map.value.leafletObject.zoomIn()
   }
@@ -35,7 +38,7 @@
 
     const { data: response } = await searchCities(search.value)
 
-    cities.value = response
+    cities.value = response.cities
   }, wait.value)
 
   const setNeighborhoods = debounce(async (city) => {
@@ -44,6 +47,12 @@
     const { data: response } = await getNeighborhoods(city.id)
 
     neighborhoods.value = response
+  }, wait.value)
+
+  const setPopulations = debounce(async (neighborhoodId) => {
+    const { data: response } = await getPopulations(neighborhoodId)
+
+    populations.value = response.populations
   }, wait.value)
 </script>
 
@@ -81,6 +90,9 @@
                 },
                 click: (event) => {
                   map.leafletObject.fitBounds(event.target.getBounds())
+
+                  neighborhoodName = event.target.feature.properties.name
+                  setPopulations(event.target.feature.id)
                 },
               })
             },
@@ -121,7 +133,12 @@
             @update:search="setCities" />
         </LControl>
         <LControl position="bottomleft" class="ma-4">
-          <VCard> a </VCard>
+          <VCard v-if="neighborhoodName && populations?.length">
+            <VCardTitle>
+              {{ neighborhoodName }}
+            </VCardTitle>
+            <!-- exibe o grafico das populacoes -->
+          </VCard>
         </LControl>
         <LControl position="bottomright" class="ma-4">
           <VBtnGroup :divided="true">

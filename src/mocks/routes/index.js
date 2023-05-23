@@ -15,7 +15,7 @@ export function routes() {
     const query = request.queryParams?.query
 
     if (!query) {
-      return new Response(400, {}, [])
+      return new Response(400, {}, {})
     }
 
     const cities = this.serialize(
@@ -25,10 +25,10 @@ export function routes() {
     )
 
     if (!cities.length) {
-      return new Response(404, {}, [])
+      return new Response(404, {}, {})
     }
 
-    return new Response(200, {}, cities)
+    return new Response(200, {}, { cities })
   })
 
   this.get('geo/neighborhoods/:cityId', function (schema, request) {
@@ -60,4 +60,25 @@ export function routes() {
 
     return new Response(200, {}, geometries)
   })
+
+  this.get(
+    'populations/neighborhoods/:neighborhoodId',
+    function (schema, request) {
+      const neighborhoodId = request.params?.neighborhoodId
+
+      if (!neighborhoodId) {
+        return new Response(400, {}, {})
+      }
+
+      const populations = this.serialize(
+        schema.populations.where({ neighborhoodId })
+      )
+
+      if (!populations.length) {
+        return new Response(404, {}, {})
+      }
+
+      return new Response(200, {}, { populations })
+    }
+  )
 }

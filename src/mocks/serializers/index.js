@@ -10,4 +10,9 @@ export const serializers = {
     root: false,
     include: ['city'],
   }),
+  population: ActiveModelSerializer.extend({
+    embed: true,
+    root: false,
+    include: ['neighborhood'],
+  }),
 }

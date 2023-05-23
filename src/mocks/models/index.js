@@ -5,4 +5,7 @@ export const models = {
   neighborhood: Model.extend({
     city: belongsTo(),
   }),
+  population: Model.extend({
+    neighborhood: belongsTo(),
+  }),
 }
