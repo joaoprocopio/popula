@@ -5,7 +5,7 @@
     LControl,
     LGeoJson,
   } from '@vue-leaflet/vue-leaflet'
-  import { Bar } from 'vue-chartjs'
+  import { Bar, Line } from 'vue-chartjs'
   import { ref } from 'vue'
   import { debounce, lowerCase } from 'lodash-es'
 
@@ -19,8 +19,10 @@
     BarElement,
     CategoryScale,
     LinearScale,
+    PointElement,
+    LineElement,
   } from 'chart.js'
-  import { onMounted } from 'vue'
+  import { VBtnGroup } from 'vuetify/lib/components/index.mjs'
 
   ChartJS.register(
     Title,
@@ -28,8 +30,12 @@
     Legend,
     BarElement,
     CategoryScale,
-    LinearScale
+    LinearScale,
+    PointElement,
+    LineElement
   )
+
+  const isBarChart = ref(true)
 
   const map = ref(null)
   const geojson = ref(null)
@@ -166,6 +172,19 @@
             </VCardTitle>
             <VCardText>
               <Bar
+                v-if="isBarChart"
+                :data="{
+                  labels: populations.map((population) => population.year),
+                  datasets: [
+                    {
+                      label: 'Population',
+                      backgroundColor: '#7B1FA2',
+                      data: populations.map((population) => population.count),
+                    },
+                  ],
+                }" />
+              <Line
+                v-else
                 :data="{
                   labels: populations.map((population) => population.year),
                   datasets: [
@@ -177,10 +196,16 @@
                   ],
                 }" />
             </VCardText>
+            <VCardActions>
+              <VBtnToggle v-model="isBarChart" style="width: 100%" mandatory>
+                <VBtn icon="bar_chart" :value="true" />
+                <VBtn icon="show_chart" class="ma-0" :value="false" />
+              </VBtnToggle>
+            </VCardActions>
           </VCard>
         </LControl>
         <LControl position="bottomright" class="ma-4">
-          <VBtnGroup :divided="true">
+          <VBtnGroup>
             <VBtn icon="remove" @click="zoomOut" />
             <VBtn icon="add" @click="zoomIn" />
           </VBtnGroup>
