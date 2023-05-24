@@ -56,6 +56,7 @@
   const options = ref({
     font: 'Roboto',
   })
+
   const data = computed(() => {
     return {
       labels: $props.labels,
@@ -68,7 +69,6 @@
       ],
     }
   })
-
   const isBarChart = computed(() => $props.variant === 'bar')
   const isLineChart = computed(() => $props.variant === 'line')
 </script>
