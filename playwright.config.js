@@ -1,4 +1,4 @@
-/* eslint-env node*/
+/* eslint-env node */
 import { defineConfig, devices } from '@playwright/test'
 
 const baseURL = {
