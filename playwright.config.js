@@ -9,7 +9,9 @@ export default defineConfig({
   workers: process.env.CI ? 1 : undefined,
   reporter: 'html',
   use: {
-    // baseURL: 'http://127.0.0.1:3000',
+    baseURL: process.env.CI
+      ? 'http://localhost:3001/popula'
+      : 'http://localhost:3000/popula',
     trace: 'on-first-retry',
   },
   projects: [
@@ -27,30 +29,20 @@ export default defineConfig({
       name: 'webkit',
       use: { ...devices['Desktop Safari'] },
     },
-
-    /* Test against mobile viewports. */
-    // {
-    //   name: 'Mobile Chrome',
-    //   use: { ...devices['Pixel 5'] },
-    // },
-    // {
-    //   name: 'Mobile Safari',
-    //   use: { ...devices['iPhone 12'] },
-    // },
-
-    /* Test against branded browsers. */
-    // {
-    //   name: 'Microsoft Edge',
-    //   use: { ...devices['Desktop Edge'], channel: 'msedge' },
-    // },
-    // {
-    //   name: 'Google Chrome',
-    //   use: { ..devices['Desktop Chrome'], channel: 'chrome' },
-    // },
+    {
+      name: 'Mobile Chrome',
+      use: { ...devices['Pixel 5'] },
+    },
+    {
+      name: 'Mobile Safari',
+      use: { ...devices['iPhone 12'] },
+    },
   ],
-  // webServer: {
-  //   command: 'npm run start',
-  //   url: 'http://127.0.0.1:3000',
-  //   reuseExistingServer: !process.env.CI,
-  // },
+  webServer: {
+    command: process.env.CI ? 'npm run preview' : 'npm run dev',
+    url: process.env.CI
+      ? 'http://localhost:3001/popula'
+      : 'http://localhost:3000/popula',
+    reuseExistingServer: !process.env.CI,
+  },
 })
