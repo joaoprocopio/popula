@@ -1,19 +1,13 @@
 <script setup>
-  import {
-    LMap,
-    LTileLayer,
-    LControl,
-    LGeoJson,
-  } from '@vue-leaflet/vue-leaflet'
+  import { LMap, LTileLayer, LControl } from '@vue-leaflet/vue-leaflet'
   import { ref } from 'vue'
 
-  import { PChart, PSearchbar, PZoom } from '~/components'
+  import { PChart, PGeometry, PSearchbar, PZoom } from '~/components'
   import { searchCities, getNeighborhoods, getPopulations } from '~/api'
 
   const isBarChart = ref(true)
 
   const map = ref(null)
-  const geojson = ref(null)
 
   const neighborhoodName = ref(null)
 
@@ -39,8 +33,10 @@
     map.value.leafletObject.flyTo(city.coordinates, 14)
   }
 
-  const setPopulations = async (neighborhoodId) => {
-    const { data: response } = await getPopulations(neighborhoodId)
+  const setPopulations = async (target) => {
+    map.value.leafletObject.fitBounds(target.getBounds())
+    neighborhoodName.value = target.feature.properties.name
+    const { data: response } = await getPopulations(target.feature.id)
 
     populations.value = response.populations
   }
@@ -60,44 +56,10 @@
           zoomControl: false,
           attributionControl: false,
         }">
-        <LGeoJson
-          ref="geojson"
-          :geojson="neighborhoods"
-          :options="{
-            onEachFeature: (feature, layer) => {
-              layer.on({
-                mouseover: (event) => {
-                  event.target.setStyle({
-                    weight: 4,
-                    dashArray: '',
-                    fillColor: '#6A1B9A',
-                  })
-
-                  event.target.bringToFront()
-                },
-                mouseout: (event) => {
-                  geojson.leafletObject.resetStyle(event.target)
-                },
-                click: (event) => {
-                  map.leafletObject.fitBounds(event.target.getBounds())
-
-                  neighborhoodName = event.target.feature.properties.name
-                  setPopulations(event.target.feature.id)
-                },
-              })
-            },
-          }"
-          :options-style="
-            () => {
-              return {
-                fillColor: '#7B1FA2',
-                weight: 3,
-                color: 'white',
-                dashArray: '4',
-                fillOpacity: 0.7,
-              }
-            }
-          " />
+        <PGeometry
+          v-if="neighborhoods"
+          :geometry="neighborhoods"
+          @click-feature="setPopulations" />
         <LTileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
         <LControl
           position="topleft"
