@@ -5,35 +5,11 @@
     LControl,
     LGeoJson,
   } from '@vue-leaflet/vue-leaflet'
-  import { Bar, Line } from 'vue-chartjs'
   import { ref } from 'vue'
   import { debounce, lowerCase } from 'lodash-es'
 
+  import { PChart } from '~/components'
   import { searchCities, getNeighborhoods, getPopulations } from '~/api'
-
-  import {
-    Chart as ChartJS,
-    Title,
-    Tooltip,
-    Legend,
-    BarElement,
-    CategoryScale,
-    LinearScale,
-    PointElement,
-    LineElement,
-  } from 'chart.js'
-  import { VBtnGroup } from 'vuetify/lib/components/index.mjs'
-
-  ChartJS.register(
-    Title,
-    Tooltip,
-    Legend,
-    BarElement,
-    CategoryScale,
-    LinearScale,
-    PointElement,
-    LineElement
-  )
 
   const isBarChart = ref(true)
 
@@ -176,38 +152,11 @@
               {{ neighborhoodName }}
             </VCardTitle>
             <VCardText>
-              <Bar
-                v-if="isBarChart"
-                class="d-inline"
-                :data="{
-                  labels: populations.map((population) => population.year),
-                  datasets: [
-                    {
-                      label: 'Population',
-                      backgroundColor: '#7B1FA2',
-                      data: populations.map((population) => population.count),
-                    },
-                  ],
-                }"
-                :options="{
-                  font: 'Roboto',
-                }" />
-              <Line
-                v-else
-                class="d-inline"
-                :data="{
-                  labels: populations.map((population) => population.year),
-                  datasets: [
-                    {
-                      label: 'Population',
-                      backgroundColor: '#7B1FA2',
-                      data: populations.map((population) => population.count),
-                    },
-                  ],
-                }"
-                :options="{
-                  font: 'Roboto',
-                }" />
+              <PChart
+                label="Population"
+                :variant="isBarChart ? 'bar' : 'line'"
+                :labels="populations.map((population) => population.year)"
+                :dataset="populations.map((population) => population.count)" />
             </VCardText>
             <VCardActions>
               <VBtnToggle v-model="isBarChart" style="width: 100%" mandatory>
