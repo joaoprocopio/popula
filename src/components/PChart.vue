@@ -1,22 +1,4 @@
 <template>
-  <!-- labels: populations.map((population) => population.year),
-    datasets: [
-      {
-        label: 'Population',
-        backgroundColor: '#7B1FA2',
-        data: populations.map((population) => population.count),
-      },
-    ],
-  }
-  labels: populations.map((population) => population.year),
-    datasets: [
-      {
-        label: 'Population',
-        backgroundColor: '#7B1FA2',
-        data: populations.map((population) => population.count),
-      },
-    ],
-  } -->
   <Bar v-if="isBarChart" :class="classes" :data="data" :options="options" />
   <Line v-if="isLineChart" :class="classes" :data="data" :options="options" />
 </template>
