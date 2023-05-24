@@ -53,7 +53,10 @@ Para rodar os testes end-to-end, use o comando:
 npm run test:e2e
 ```
 
-> Caso não funcione, instale as dependências de sistema operacional com o comando: `npx playwright install-deps`.
+> Caso não funcione, instale as dependências de sistema operacional com os comandos:
+>
+> `npx playwright install`  
+> `npx playwright install-deps`
 
 ## O que foi usado nesse projeto?
 
