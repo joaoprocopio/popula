@@ -11,28 +11,28 @@
 
   const neighborhood = ref({})
 
-  const zoomIn = () => map.value.leafletObject.zoomIn()
-
-  const zoomOut = () => map.value.leafletObject.zoomOut()
-
+  const cities = ref([])
   const neighborhoods = ref(null)
   const populations = ref(null)
-  const cities = ref([])
+
+  const flyTo = (coordinates) => map.value.leafletObject.flyTo(coordinates, 13)
+  const fitBounds = (bounds) => map.value.leafletObject.fitBounds(bounds)
+
+  const zoomIn = () => map.value.leafletObject.zoomIn()
+  const zoomOut = () => map.value.leafletObject.zoomOut()
 
   const setCities = async (query) => {
     const { data: response } = await searchCities(query)
 
     cities.value = response.cities
   }
-
   const setNeighborhoods = async (city) => {
     const { data: response } = await getNeighborhoods(city.id)
 
     neighborhoods.value = response
 
-    map.value.leafletObject.flyTo(city.coordinates, 14)
+    flyTo(city.coordinates)
   }
-
   const setPopulations = async (geometry) => {
     if (neighborhood.value?.id === geometry.feature?.id) return
 
@@ -43,7 +43,7 @@
 
     const { data: response } = await getPopulations(neighborhood.value.id)
 
-    map.value.leafletObject.fitBounds(geometry.getBounds())
+    fitBounds(geometry.getBounds())
 
     populations.value = response.populations
   }
