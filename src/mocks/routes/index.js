@@ -1,5 +1,5 @@
 import { Response } from 'miragejs'
-import { lowerCase } from 'lodash-es'
+import { lowerCase } from 'lodash'
 import { featureCollection, multiPolygon } from '@turf/helpers'
 
 export function routes() {

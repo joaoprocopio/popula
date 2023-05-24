@@ -19,7 +19,7 @@
 
 <script setup>
   import { ref } from 'vue'
-  import { lowerCase, debounce } from 'lodash-es'
+  import { lowerCase, debounce } from 'lodash'
 
   const wait = ref(500)
   const selected = ref(null)
