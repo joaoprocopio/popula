@@ -1,0 +1,51 @@
+<template>
+  <VAutocomplete
+    v-model="selected"
+    v-model:search="search"
+    :items="$props.items"
+    :return-object="true"
+    :custom-filter="
+      (target, query) => lowerCase(target).startsWith(lowerCase(query))
+    "
+    flat
+    item-title="name"
+    hide-no-data
+    variant="solo"
+    prepend-inner-icon="search"
+    @update:model-value="emitSelected"
+    @update:search="emitSearch" />
+</template>
+
+<script setup>
+  import { ref } from 'vue'
+  import { lowerCase, debounce } from 'lodash-es'
+
+  const wait = ref(500)
+  const selected = ref(null)
+  const search = ref(null)
+
+  const $emit = defineEmits(['selected', 'search'])
+  const $props = defineProps({
+    items: {
+      type: Array,
+      required: true,
+    },
+  })
+
+  const emitSelected = debounce(() => {
+    if (!selected.value) return
+
+    $emit('selected', selected.value)
+  }, wait.value)
+
+  const emitSearch = debounce(() => {
+    if (!search.value) return
+    if (
+      selected.value?.name === search.value ||
+      selected.value === search.value
+    )
+      return
+
+    $emit('search', search.value)
+  }, wait.value)
+</script>

@@ -6,9 +6,8 @@
     LGeoJson,
   } from '@vue-leaflet/vue-leaflet'
   import { ref } from 'vue'
-  import { debounce, lowerCase } from 'lodash-es'
 
-  import { PChart } from '~/components'
+  import { PChart, PSearchbar } from '~/components'
   import { searchCities, getNeighborhoods, getPopulations } from '~/api'
 
   const isBarChart = ref(true)
@@ -20,12 +19,9 @@
 
   const neighborhoodName = ref(null)
 
-  const city = ref(null)
   const neighborhoods = ref(null)
   const populations = ref(null)
   const cities = ref([])
-  const search = ref(null)
-  const wait = ref(500)
 
   const zoomOut = () => {
     map.value.leafletObject.zoomOut()
@@ -35,24 +31,21 @@
     map.value.leafletObject.zoomIn()
   }
 
-  const setCities = debounce(async () => {
-    if (!search.value) return
-    if (city.value?.name === search.value) return
-
-    const { data: response } = await searchCities(search.value)
+  const setCities = async (query) => {
+    const { data: response } = await searchCities(query)
 
     cities.value = response.cities
-  }, wait.value)
+  }
 
-  const setNeighborhoods = debounce(async (city) => {
+  const setNeighborhoods = async (city) => {
     const { data: response } = await getNeighborhoods(city.id)
 
     neighborhoods.value = response
 
     map.value.leafletObject.flyTo(city.coordinates, 14)
-  }, wait.value)
+  }
 
-  const setPopulations = debounce(async (neighborhoodId) => {
+  const setPopulations = async (neighborhoodId) => {
     const { data: response } = await getPopulations(neighborhoodId)
 
     populations.value = response.populations.map((population) => {
@@ -62,7 +55,7 @@
         count: population.count,
       }
     })
-  }, wait.value)
+  }
 </script>
 
 <template>
@@ -124,22 +117,10 @@
           :style="{
             width: $vuetify.display.smAndUp ? '500px' : 'calc(100vw - 32px)',
           }">
-          <VAutocomplete
-            v-model="city"
-            v-model:search="search"
-            item-props
+          <PSearchbar
             :items="cities"
-            :return-object="true"
-            :custom-filter="
-              (city, search) => lowerCase(city).startsWith(lowerCase(search))
-            "
-            item-title="name"
-            flat
-            hide-no-data
-            variant="solo"
-            prepend-inner-icon="search"
-            @update:model-value="setNeighborhoods"
-            @update:search="setCities" />
+            @search="setCities"
+            @selected="setNeighborhoods" />
         </LControl>
         <LControl
           position="bottomleft"
