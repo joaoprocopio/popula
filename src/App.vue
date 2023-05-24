@@ -9,7 +9,7 @@
 
   const map = ref(null)
 
-  const neighborhoodName = ref(null)
+  const neighborhood = ref({})
 
   const zoomIn = () => map.value.leafletObject.zoomIn()
 
@@ -33,10 +33,17 @@
     map.value.leafletObject.flyTo(city.coordinates, 14)
   }
 
-  const setPopulations = async (target) => {
-    map.value.leafletObject.fitBounds(target.getBounds())
-    neighborhoodName.value = target.feature.properties.name
-    const { data: response } = await getPopulations(target.feature.id)
+  const setPopulations = async (geometry) => {
+    if (neighborhood.value?.id === geometry.feature?.id) return
+
+    neighborhood.value = {
+      id: geometry.feature.id,
+      ...geometry.feature.properties,
+    }
+
+    const { data: response } = await getPopulations(neighborhood.value.id)
+
+    map.value.leafletObject.fitBounds(geometry.getBounds())
 
     populations.value = response.populations
   }
@@ -78,9 +85,9 @@
           :style="{
             width: $vuetify.display.smAndUp ? '500px' : 'calc(100vw - 32px)',
           }">
-          <VCard v-if="neighborhoodName && populations?.length">
+          <VCard v-if="neighborhood?.name && populations?.length">
             <VCardTitle>
-              {{ neighborhoodName }}
+              {{ neighborhood.name }}
             </VCardTitle>
             <VCardText>
               <PChart
