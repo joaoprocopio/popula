@@ -53,7 +53,10 @@ Para rodar os testes end-to-end, use o comando:
 npm run test:e2e
 ```
 
-> Caso não funcione, instale as dependências de sistema operacional com o comando: `npx playwright install-deps`.
+> Caso não funcione, instale as dependências de sistema operacional com os comandos:
+>
+> `npx playwright install`  
+> `npx playwright install-deps`
 
 ## O que foi usado nesse projeto?
 
@@ -61,28 +64,30 @@ npm run test:e2e
 - [Vuetify](https://vuetifyjs.com/en/): Biblioteca de componentes Vue baseada em Material Design;
 - [Mirage](https://miragejs.com/): Client-side server para construir API Mock;
 - [Leaflet](https://leafletjs.com/): Biblioteca para construir mapas interativos;
-- [Chart](https://www.chartjs.org/): Biblioteca extremamente simples e intuitiva para criar gráficos.  
+- [Chart](https://www.chartjs.org/): Biblioteca extremamente simples e intuitiva para criar gráficos.
 
 ## Modelagem
 
 Dentro da nossa Mock temos três modelos, sendo eles:
 
-  - `City`, modelo cidades, que contém:
-    - `Id`: chave primária do modelo;
-    - `Name`: nome da cidade;
-    - `Coordinates`: ponto que traz a latitude e longitude da cidade.
+- `City`, modelo cidades, que contém:
 
-  - `Neighborhood`, modelo bairros, que contém:
-    - `Id`: chave primária do modelo;
-    - `Name`: nome do bairro;
-    - `CityId`: chave estrangeira do modelo City;
-    - `Coordinates`: ponto que traz a latitude e longitude do bairro.
+  - `Id`: chave primária do modelo;
+  - `Name`: nome da cidade;
+  - `Coordinates`: ponto que traz a latitude e longitude da cidade.
 
-  - `Population`, modelo população, que contém:
-    - `Id`: chave primária do modelo;
-    - `Year`: ano da população;
-    - `Count`: tamanho da população dado o ano;
-    - `NeighborhoodId`: chave estrangeira do modelo Neighborhood.
+- `Neighborhood`, modelo bairros, que contém:
+
+  - `Id`: chave primária do modelo;
+  - `Name`: nome do bairro;
+  - `CityId`: chave estrangeira do modelo City;
+  - `Coordinates`: ponto que traz a latitude e longitude do bairro.
+
+- `Population`, modelo população, que contém:
+  - `Id`: chave primária do modelo;
+  - `Year`: ano da população;
+  - `Count`: tamanho da população dado o ano;
+  - `NeighborhoodId`: chave estrangeira do modelo Neighborhood.
 
 Guardamos dentro do "banco de dados" da nossa Mock de forma relacional, ou seja, cada bairro tem uma cidade e cada população tem um bairro.
 
@@ -103,37 +108,39 @@ API de Busca
 API que busca cidades com base em uma query string.
 
 Parâmetros:
-  - `query` - Nome da cidade
-    - **Obrigatório**
-    - Tipo de dado: `String`
-    - Tipo de parâmetro: `Query`
+
+- `query` - Nome da cidade
+  - **Obrigatório**
+  - Tipo de dado: `String`
+  - Tipo de parâmetro: `Query`
 
 Respostas:
-  - `200 OK`: Objeto com as cidades encontradas.
-  ```json
-  {
-    "cities": [
-      {
-        "id": "1",
-        "name": "São José dos Campos",
-        "coordinates": [
-          -23.2198,
-          -45.8916
-        ]
-      }
-    ]
-  }
-  ```
 
-  - `400 Bad Request`: Ausência ou invalidez de parâmetros obrigatórios.
-  ```json
-  {}
-  ```
+- `200 OK`: Objeto com as cidades encontradas.
 
-  - `404 Not Found`: Nenhuma cidade encontrada.
-  ```json
-  {}
-  ```
+```json
+{
+  "cities": [
+    {
+      "id": "1",
+      "name": "São José dos Campos",
+      "coordinates": [-23.2198, -45.8916]
+    }
+  ]
+}
+```
+
+- `400 Bad Request`: Ausência ou invalidez de parâmetros obrigatórios.
+
+```json
+{}
+```
+
+- `404 Not Found`: Nenhuma cidade encontrada.
+
+```json
+{}
+```
 
 ### Geo
 
@@ -144,56 +151,61 @@ API que conversa em GEOJson
 Lista a geometrias dos bairros de uma cidade.
 
 Parâmetros:
-  - `cityId` - ID da cidade
-    - **Obrigatório**
-    - Tipo de dado: `Integer`
-    - Tipo de parâmetro: `Path`
+
+- `cityId` - ID da cidade
+  - **Obrigatório**
+  - Tipo de dado: `Integer`
+  - Tipo de parâmetro: `Path`
 
 Respostas:
-  - `200 OK`: Objeto com as geometrias dos bairros da dada cidade.
-  ```json
-  {
-    "type": "FeatureCollection",
-    "features": [
-      {
-        "type": "Feature",
-        "id": "1",
-        "bbox": [
-          -45.916855,
-          ...
-        ],
-        "properties": {
-          "name": "Jd. Colinas"
-        },
-        "geometry": {
-          "type": "MultiPolygon",
-          "coordinates": [
+
+- `200 OK`: Objeto com as geometrias dos bairros da dada cidade.
+
+```json
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "id": "1",
+      "bbox": [
+        -45.916855,
+        ...
+      ],
+      "properties": {
+        "name": "Jd. Colinas"
+      },
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
+          [
             [
               [
-                [
-                  -45.90843208446761,
-                  -23.20827026939924
-                ],
-                ...
-              ]
+                -45.90843208446761,
+                -23.20827026939924
+              ],
+              ...
             ]
           ]
-        }
-      },
-      ...
-    ]
-  }
-  ```
+        ]
+      }
+    },
+    ...
+  ]
+}
+```
 
-  - `400 Bad Request`: Ausência ou invalidez de parâmetros obrigatórios.
-  ```json
-  {}
-  ```
+- `400 Bad Request`: Ausência ou invalidez de parâmetros obrigatórios.
 
-  - `404 Not Found`: Geometria dos bairros não foram encontradas.
-  ```json
-  {}
-  ```
+```json
+{}
+```
+
+- `404 Not Found`: Geometria dos bairros não foram encontradas.
+
+```json
+{}
+```
 
 ### Population
 
@@ -204,47 +216,51 @@ Lista a população de uma localidade ao passar dos anos.
 Lista a população de um bairro ao passar dos anos.
 
 Parâmetros:
-  - `neighborhoodId` - Nome da cidade
-    - **Obrigatório**
-    - Tipo de dado: `Integer`
-    - Tipo de parâmetro: `Path`
+
+- `neighborhoodId` - Nome da cidade
+  - **Obrigatório**
+  - Tipo de dado: `Integer`
+  - Tipo de parâmetro: `Path`
 
 Respostas:
-  - `200 OK`: Lista com as populações.
-  ```json
-  {
-    "populations": [
-      {
-        "id": "1",
-        "year": 2000,
-        "count": 11567
-      },
-      {
-        "id": "2",
-        "year": 2002,
-        "count": 12345
-      },
-      {
-        "id": "3",
-        "year": 2004,
-        "count": 13450
-      },
-      {
-        "id": "4",
-        "year": 2006,
-        "count": 13550
-      }
-    ]
-  }
-  ```
 
-  - `400 Bad Request`: Ausência ou invalidez de parâmetros obrigatórios.
-  ```json
-  {}
-  ```
+- `200 OK`: Lista com as populações.
 
-  - `404 Not Found`: População para este bairro não foi encontrada.
-  ```json
-  {}
-  ```
+```json
+{
+  "populations": [
+    {
+      "id": "1",
+      "year": 2000,
+      "count": 11567
+    },
+    {
+      "id": "2",
+      "year": 2002,
+      "count": 12345
+    },
+    {
+      "id": "3",
+      "year": 2004,
+      "count": 13450
+    },
+    {
+      "id": "4",
+      "year": 2006,
+      "count": 13550
+    }
+  ]
+}
+```
 
+- `400 Bad Request`: Ausência ou invalidez de parâmetros obrigatórios.
+
+```json
+{}
+```
+
+- `404 Not Found`: População para este bairro não foi encontrada.
+
+```json
+{}
+```

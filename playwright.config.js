@@ -1,5 +1,10 @@
-/* eslint-env node*/
+/* eslint-env node */
 import { defineConfig, devices } from '@playwright/test'
+
+const baseURL = {
+  preview: 'http://localhost:3001/popula',
+  dev: 'http://localhost:3000/popula',
+}
 
 export default defineConfig({
   testDir: './e2e',
@@ -9,7 +14,7 @@ export default defineConfig({
   workers: process.env.CI ? 1 : undefined,
   reporter: 'html',
   use: {
-    // baseURL: 'http://127.0.0.1:3000',
+    baseURL: process.env.CI ? baseURL.preview : baseURL.dev,
     trace: 'on-first-retry',
   },
   projects: [
@@ -22,35 +27,14 @@ export default defineConfig({
       name: 'firefox',
       use: { ...devices['Desktop Firefox'] },
     },
-
     {
       name: 'webkit',
       use: { ...devices['Desktop Safari'] },
     },
-
-    /* Test against mobile viewports. */
-    // {
-    //   name: 'Mobile Chrome',
-    //   use: { ...devices['Pixel 5'] },
-    // },
-    // {
-    //   name: 'Mobile Safari',
-    //   use: { ...devices['iPhone 12'] },
-    // },
-
-    /* Test against branded browsers. */
-    // {
-    //   name: 'Microsoft Edge',
-    //   use: { ...devices['Desktop Edge'], channel: 'msedge' },
-    // },
-    // {
-    //   name: 'Google Chrome',
-    //   use: { ..devices['Desktop Chrome'], channel: 'chrome' },
-    // },
   ],
-  // webServer: {
-  //   command: 'npm run start',
-  //   url: 'http://127.0.0.1:3000',
-  //   reuseExistingServer: !process.env.CI,
-  // },
+  webServer: {
+    command: process.env.CI ? 'npm run preview' : 'npm run dev',
+    url: process.env.CI ? baseURL.preview : baseURL.dev,
+    reuseExistingServer: !process.env.CI,
+  },
 })
