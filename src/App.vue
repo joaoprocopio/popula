@@ -14,8 +14,6 @@
 
   const map = ref(null)
   const geojson = ref(null)
-  const zoom = ref(4)
-  const center = ref([-14.235, -51.9253])
 
   const neighborhoodName = ref(null)
 
@@ -53,15 +51,15 @@
     <VMain>
       <LMap
         ref="map"
-        v-model:center.sync="center"
-        v-model:zoom.sync="zoom"
+        :use-global-leaflet="false"
+        :zoom="4"
+        :center="[-14.235, -51.9253]"
         :options="{
           minZoom: 4,
           maxZoom: 16,
           zoomControl: false,
           attributionControl: false,
-        }"
-        :use-global-leaflet="false">
+        }">
         <LGeoJson
           ref="geojson"
           :geojson="neighborhoods"
