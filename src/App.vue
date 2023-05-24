@@ -19,17 +19,13 @@
 
   const neighborhoodName = ref(null)
 
+  const zoomIn = () => map.value.leafletObject.zoomIn()
+
+  const zoomOut = () => map.value.leafletObject.zoomOut()
+
   const neighborhoods = ref(null)
   const populations = ref(null)
   const cities = ref([])
-
-  const zoomOut = () => {
-    map.value.leafletObject.zoomOut()
-  }
-
-  const zoomIn = () => {
-    map.value.leafletObject.zoomIn()
-  }
 
   const setCities = async (query) => {
     const { data: response } = await searchCities(query)
