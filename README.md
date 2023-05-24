@@ -37,7 +37,7 @@ Rodar o projeto é extremamente simples, use o comando:
 npm run dev
 ```
 
-> Ao acessar http://localhost:3000, seu front-end estará funcionando
+> Ao acessar http://localhost:3000/popula, seu front-end estará funcionando
 
 ### Rodar os testes do front-end
 
