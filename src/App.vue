@@ -7,14 +7,13 @@
   import { searchCities, getNeighborhoods, getPopulations } from '~/api'
 
   const chartVariant = ref('bar')
-
-  const map = ref(null)
-
   const neighborhood = ref({})
 
   const cities = ref([])
   const neighborhoods = ref(null)
   const populations = ref(null)
+
+  const map = ref(null)
 
   const flyTo = (coordinates) => map.value.leafletObject.flyTo(coordinates, 13)
   const fitBounds = (bounds) => map.value.leafletObject.fitBounds(bounds)
