@@ -7,7 +7,7 @@
   } from '@vue-leaflet/vue-leaflet'
   import { ref } from 'vue'
 
-  import { PChart, PSearchbar } from '~/components'
+  import { PChart, PSearchbar, PZoom } from '~/components'
   import { searchCities, getNeighborhoods, getPopulations } from '~/api'
 
   const isBarChart = ref(true)
@@ -142,10 +142,7 @@
           </VCard>
         </LControl>
         <LControl position="bottomright" class="ma-4">
-          <VBtnGroup>
-            <VBtn icon="remove" @click="zoomOut" />
-            <VBtn icon="add" @click="zoomIn" />
-          </VBtnGroup>
+          <PZoom @zoom-out="zoomOut" @zoom-in="zoomIn" />
         </LControl>
       </LMap>
     </VMain>
