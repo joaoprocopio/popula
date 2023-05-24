@@ -1,13 +1,17 @@
 import { fileURLToPath, URL } from 'node:url'
 
 import { defineConfig } from 'vite'
+import { configDefaults } from 'vitest/config'
+
 import vue from '@vitejs/plugin-vue'
 
 export default defineConfig({
   plugins: [vue()],
   server: {
-    host: true,
     port: 3000,
+  },
+  preview: {
+    port: 3001,
   },
   base: '/popula',
   resolve: {
@@ -19,5 +23,6 @@ export default defineConfig({
   test: {
     environment: 'jsdom',
     root: fileURLToPath(new URL('./', import.meta.url)),
+    exclude: [...configDefaults.exclude, './e2e/**/*'],
   },
 })

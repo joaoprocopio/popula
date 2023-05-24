@@ -53,6 +53,8 @@ Para rodar os testes end-to-end, use o comando:
 npm run test:e2e
 ```
 
+> Caso não funcione, instale as dependências de sistema operacional com o comando: `npx playwright install-deps`.
+
 ## O que foi usado nesse projeto?
 
 - [Vue](https://vuejs.org/): Framework JavaScript para construir interfaces e aplicações;
