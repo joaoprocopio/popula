@@ -1,6 +1,11 @@
 /* eslint-env node*/
 import { defineConfig, devices } from '@playwright/test'
 
+const baseURL = {
+  preview: 'http://localhost:3001/popula',
+  dev: 'http://localhost:3000/popula',
+}
+
 export default defineConfig({
   testDir: './e2e',
   fullyParallel: true,
@@ -9,9 +14,7 @@ export default defineConfig({
   workers: process.env.CI ? 1 : undefined,
   reporter: 'html',
   use: {
-    baseURL: process.env.CI
-      ? 'http://localhost:3001/popula'
-      : 'http://localhost:3000/popula',
+    baseURL: process.env.CI ? baseURL.preview : baseURL.dev,
     trace: 'on-first-retry',
   },
   projects: [
@@ -40,9 +43,7 @@ export default defineConfig({
   ],
   webServer: {
     command: process.env.CI ? 'npm run preview' : 'npm run dev',
-    url: process.env.CI
-      ? 'http://localhost:3001/popula'
-      : 'http://localhost:3000/popula',
+    url: process.env.CI ? baseURL.preview : baseURL.dev,
     reuseExistingServer: !process.env.CI,
   },
 })
