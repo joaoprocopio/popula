@@ -6,7 +6,7 @@
   import { PChart, PControl, PGeometry, PSearchbar, PZoom } from '~/components'
   import { searchCities, getNeighborhoods, getPopulations } from '~/api'
 
-  const isBarChart = ref(true)
+  const chartVariant = ref('bar')
 
   const map = ref(null)
 
@@ -77,22 +77,24 @@
         </PControl>
         <PControl :is-responsive="true" position="bottomleft">
           <VCard v-if="neighborhood?.name && populations?.length">
-            <VCardTitle>
+            <VCardTitle class="font-weight-bold text-center">
               {{ neighborhood.name }}
             </VCardTitle>
             <VCardText>
               <PChart
                 label="Population"
-                :variant="isBarChart ? 'bar' : 'line'"
+                :variant="chartVariant"
                 :labels="populations.map((population) => population.year)"
                 :dataset="populations.map((population) => population.count)" />
             </VCardText>
-            <VCardActions>
-              <VBtnToggle v-model="isBarChart" style="width: 100%" mandatory>
-                <VBtn icon="bar_chart" :value="true" />
-                <VBtn icon="show_chart" class="ma-0" :value="false" />
-              </VBtnToggle>
-            </VCardActions>
+            <VTabs v-model="chartVariant" grow>
+              <VTab value="bar">
+                <VIcon icon="bar_chart" />
+              </VTab>
+              <VTab value="line">
+                <VIcon icon="show_chart" />
+              </VTab>
+            </VTabs>
           </VCard>
         </PControl>
         <PControl position="bottomright">
