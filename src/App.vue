@@ -48,13 +48,7 @@
   const setPopulations = async (neighborhoodId) => {
     const { data: response } = await getPopulations(neighborhoodId)
 
-    populations.value = response.populations.map((population) => {
-      return {
-        id: population.id,
-        year: population.year,
-        count: population.count,
-      }
-    })
+    populations.value = response.populations
   }
 </script>
 
