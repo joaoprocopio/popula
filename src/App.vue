@@ -1,8 +1,9 @@
 <script setup>
-  import { LMap, LTileLayer, LControl } from '@vue-leaflet/vue-leaflet'
   import { ref } from 'vue'
 
-  import { PChart, PGeometry, PSearchbar, PZoom } from '~/components'
+  import { LMap, LTileLayer } from '@vue-leaflet/vue-leaflet'
+
+  import { PChart, PControl, PGeometry, PSearchbar, PZoom } from '~/components'
   import { searchCities, getNeighborhoods, getPopulations } from '~/api'
 
   const isBarChart = ref(true)
@@ -68,23 +69,13 @@
           :geometry="neighborhoods"
           @click-feature="setPopulations" />
         <LTileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
-        <LControl
-          position="topleft"
-          class="ma-4"
-          :style="{
-            width: $vuetify.display.smAndUp ? '500px' : 'calc(100vw - 32px)',
-          }">
+        <PControl :is-responsive="true" position="topleft">
           <PSearchbar
             :items="cities"
             @search="setCities"
             @selected="setNeighborhoods" />
-        </LControl>
-        <LControl
-          position="bottomleft"
-          class="ma-4"
-          :style="{
-            width: $vuetify.display.smAndUp ? '500px' : 'calc(100vw - 32px)',
-          }">
+        </PControl>
+        <PControl :is-responsive="true" position="bottomleft">
           <VCard v-if="neighborhood?.name && populations?.length">
             <VCardTitle>
               {{ neighborhood.name }}
@@ -103,10 +94,10 @@
               </VBtnToggle>
             </VCardActions>
           </VCard>
-        </LControl>
-        <LControl position="bottomright" class="ma-4">
+        </PControl>
+        <PControl position="bottomright">
           <PZoom @zoom-out="zoomOut" @zoom-in="zoomIn" />
-        </LControl>
+        </PControl>
       </LMap>
     </VMain>
   </VApp>

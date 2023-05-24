@@ -2,16 +2,17 @@
   <VAutocomplete
     v-model="selected"
     v-model:search="search"
+    :menu-icon="null"
     :items="$props.items"
     :return-object="true"
     :custom-filter="
       (target, query) => lowerCase(target).startsWith(lowerCase(query))
     "
-    flat
     item-title="name"
-    hide-no-data
-    variant="solo"
     prepend-inner-icon="search"
+    variant="solo"
+    flat
+    hide-no-data
     @update:model-value="emitSelected"
     @update:search="emitSearch" />
 </template>
