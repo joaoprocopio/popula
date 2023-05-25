@@ -1,24 +1,23 @@
-import { render } from '@testing-library/vue'
-import userEvent from '@testing-library/user-event'
+import { mount } from '@vue/test-utils'
 
 import { describe, expect, test } from 'vitest'
 
 import { PZoom } from '..'
 
-const wrapper = () => render(PZoom, {})
+const render = (config = {}) => mount(PZoom, config)
 
 describe('PZoom', () => {
-  const user = userEvent.setup()
-  const { emitted, getByTestId } = wrapper()
+  const wrapper = render()
 
   test('On click should emit "zoomOut"', async () => {
-    await user.click(getByTestId('zoomOut'))
+    await wrapper.get('[data-testid="zoomOut"]').trigger('click')
 
-    expect(emitted().zoomOut).toBeTruthy()
+    expect(wrapper.emitted().zoomOut).toBeTruthy()
   })
-  test('On click should emit "zoomIn"', async () => {
-    await user.click(getByTestId('zoomIn'))
 
-    expect(emitted().zoomIn).toBeTruthy()
+  test('On click should emit "zoomIn"', async () => {
+    await wrapper.get('[data-testid="zoomIn"]').trigger('click')
+
+    expect(wrapper.emitted().zoomIn).toBeTruthy()
   })
 })

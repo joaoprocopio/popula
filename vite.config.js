@@ -14,7 +14,6 @@ export default defineConfig({
     port: 3001,
   },
   base: '/popula',
-  publicDir: './src/public',
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./', import.meta.url)),
@@ -23,6 +22,10 @@ export default defineConfig({
   },
   test: {
     environment: 'jsdom',
+    deps: {
+      inline: ['vuetify'],
+    },
+    setupFiles: './lib/vitest/setup.js',
     root: fileURLToPath(new URL('./', import.meta.url)),
     exclude: [...configDefaults.exclude, './e2e/**/*'],
   },
