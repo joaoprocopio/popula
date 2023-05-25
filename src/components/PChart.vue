@@ -1,6 +1,16 @@
 <template>
-  <Bar v-if="isBarChart" :class="classes" :data="data" :options="options" />
-  <Line v-if="isLineChart" :class="classes" :data="data" :options="options" />
+  <Bar
+    v-if="isBarChart"
+    data-test-id="bar-chart"
+    :class="classes"
+    :data="data"
+    :options="options" />
+  <Line
+    v-if="isLineChart"
+    data-test-id="line-chart"
+    :class="classes"
+    :data="data"
+    :options="options" />
 </template>
 
 <script setup>
