@@ -14,6 +14,7 @@ export default defineConfig({
     port: 3001,
   },
   base: '/popula',
+  publicDir: './src/public',
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./', import.meta.url)),
