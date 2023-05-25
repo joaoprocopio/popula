@@ -14,6 +14,7 @@ export default defineConfig({
   workers: process.env.CI ? 1 : undefined,
   reporter: 'html',
   use: {
+    headless: true,
     baseURL: process.env.CI ? baseURL.preview : baseURL.dev,
     trace: 'on-first-retry',
   },

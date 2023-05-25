@@ -53,6 +53,12 @@ Para rodar os testes end-to-end, use o comando:
 npm run test:e2e
 ```
 
+Caso você queira uma opção mais interativa, use o comando:
+
+```sh
+npm run test:e2e:dev
+```
+
 > Caso não funcione, instale as dependências de sistema operacional com os comandos:
 >
 > `npx playwright install`  
